@@ -22,7 +22,7 @@ void insertionSort(std::vector<int> &list, int endPos)
 	insert(list, endPos); // O(n)
 }
 
-//recurrence formulation: T(n) = T(n - 1) + n + c
+//recurrence formulation: T(n) = T(n - 1) + O(n) + c
 //by master's method, this recurrence relation runs in O(n^2)
 
 

@@ -52,6 +52,9 @@ int main(int argc, char *argv[])
     return EXIT_SUCCESS;
 }
 
+//***Analysis
+//T(n) = 8T(n / 2) + O(n^2) => O(n^3)
+
 /////////////////main matrix multiplication algorithm using divide-and-conquer approach
 vector<vector<int>> strassen_matrix_multiply(vector<vector<int>> matrix1, vector<vector<int>> matrix2) {
     if(matrix1.size() == 2 && matrix2.size() == 2) {

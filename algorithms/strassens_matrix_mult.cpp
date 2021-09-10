@@ -2,6 +2,9 @@
 #include <vector>
 #include <cstdlib>
 
+//divide-and-conquer implementation for matrix multiplication.
+//program is named strassen's multiplication but this modification hasn't been added, yet
+
 using namespace std;
 
 vector<vector<int>> short_matrix_multiply(vector<vector<int>> matrix1, vector<vector<int>> matrix2);

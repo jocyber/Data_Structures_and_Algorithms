@@ -13,7 +13,12 @@ void swap(int &a, int &b) {
 	b = temp;
 }
 
-int partition(vector<int> &list, int p, int r) {
+int partition_r(vector<int> &list, int p, int r) {
+	srand(time(0));
+	int random = rand() % (p - r) + p;
+	swap(list[random], list[r]);
+	//end of randomization
+
 	int e = list[r];
 	int i = p - 1;
 
@@ -33,7 +38,7 @@ void quicksort(vector<int> &list, int low, int high) {
 	int p;
 	
 	if(low < high) {
-		p = partition(list, low, high);
+		p = partition_r(list, low, high);
 		quicksort(list, low, p - 1);
 		quicksort(list, p + 1, high);
 	}

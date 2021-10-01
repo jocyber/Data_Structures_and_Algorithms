@@ -5,7 +5,7 @@
 #include <iostream>
 #include <vector>
 #include <unordered_map>
-#include <stdexcept>
+#include <unordered_set>
 
 class uGraph {
 
@@ -16,26 +16,17 @@ public:
 
     void addEdge(const int vertex, const int vertex2) {
         if(adj_list.find(vertex) != adj_list.end() && adj_list.find(vertex2) != adj_list.end()) {
-            for(int i = 0; i < adj_list[vertex].size(); i++) {
-                if(adj_list[vertex][i] == vertex2)
-                    return;
-            }
-            adj_list[vertex].push_back(vertex2);
-
-            for(int i = 0; i < adj_list[vertex2].size(); i++) {
-                if(adj_list[vertex2][i] == vertex)
-                    return;
-            }
-            adj_list[vertex2].push_back(vertex);
-
-            return;
+            if(std::find(adj_list[vertex].begin(), adj_list[vertex].end(), vertex2) == adj_list[vertex].end())
+                adj_list[vertex].push_back(vertex2);
+            
+            if(std::find(adj_list[vertex2].begin(), adj_list[vertex2].end(), vertex) == adj_list[vertex2].end())
+                adj_list[vertex2].push_back(vertex);
         }
-
-        throw std::invalid_argument("Vertex set is empty.");
     }
 
     void addVertex(const int node) {
-        adj_list[node] = std::vector<int>{};
+        if(adj_list.find(node) == adj_list.end())
+            adj_list[node] = std::vector<int>{};
     }
 
     void printList() {
@@ -76,6 +67,29 @@ public:
 
             std::cout << std::endl;
         }
+    }
+
+    //reachability problem
+    bool validPath(int start, int end) {
+        std::unordered_set<int> visited;
+        return validPath(start, end, visited);
+    }
+
+    //use dfs to determine if the end vertex is reachable
+    bool validPath(int start, int end, std::unordered_set<int> &visited) {
+        if(start == end)
+            return true;
+
+        visited.insert(start);
+
+        for(const int &x : adj_list[start]) {
+            if(visited.find(x) == visited.end()) {
+                if(validPath(x, end, visited))
+                    return true;
+            } 
+        }
+
+        return false;
     }
 };
 

@@ -13,6 +13,8 @@ int main(int argc, char *argv[])
 
 	for(int i = 1; i < 16; i++) {
 		state >>= 1;
+
+		//bit masking
 		unsigned int lastbit = state & 1;
 		unsigned int secondlastbit = (state >> 1) & 1;
 

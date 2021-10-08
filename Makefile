@@ -10,6 +10,6 @@ run: ${targets}
 commit:
 	git add ./*
 	read -p "Enter message: " message
-	git commit -m "$message"
+	git commit -m "${message}"
 	git push origin master
 

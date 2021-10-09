@@ -1,7 +1,7 @@
 #!/usr/bin/bash
 
 echo "Pushing to remote repository."
-read -p "Commit message" message
+read -p "Commit message: " message
 
 git add ./*
 git commit -m "$message"

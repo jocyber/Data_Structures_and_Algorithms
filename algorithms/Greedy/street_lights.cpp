@@ -1,10 +1,9 @@
-#include <vector>
 #include <iostream>
 
 using std::cout;
-using std::vector;
 
 //greedy approach to solving the street lights problem
+//Property: kr + (k - 1)r  always exists within some optimal solution
 int min_street_lights(const int &n, int r) { // O(n)
     int count = 0;
 

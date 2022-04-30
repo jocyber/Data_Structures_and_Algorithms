@@ -5,84 +5,70 @@
 #include <iostream>
 #include <fstream>
 #include <ctype.h>
+#include <stdlib.h>
 
 std::unordered_set<std::string> words;
-std::vector<std::vector<char>> boardRes;
+std::vector<std::vector<bool>> boardRes;
 
 void printBoard(const std::vector<std::vector<char>> &board);
+void printRes(const std::vector<std::vector<char>> &board, const std::vector<std::vector<bool>> &boardRes);
 
 //algorithm to solve the puzzle
 bool searchWord(const std::vector<std::vector<char>> &board, Trie &trie, unsigned int i, unsigned int j, int hor_dir = 0, int vert_dir = 0, std::string word = "") {
     std::string uWord = word + board[i][j];
 
     if(words.find(uWord) != words.end()) {
-			boardRes[i][j] = uWord[uWord.length() - 1];
+			boardRes[i][j] = true;
       return true;
 		}
     else if(trie.isWordPresent(word)) {
         if(hor_dir == 0 && vert_dir == 0) { //check all directions
             if(i > 0 && j > 0) { //upper left corner
                 bool found = searchWord(board, trie, i - 1, j - 1, -1, -1,uWord);
-								if(found) {	
-									boardRes[i][j] = uWord[uWord.length() - 1];
-									return true;
-								}
+								if(found)
+									boardRes[i][j] = true;
 						}
 
             if(i > 0 && j < board[i].size() - 1) { //top right corner
 	              bool found = searchWord(board, trie, i - 1, j + 1, 1, -1,uWord);
-								if(found) {	
-									boardRes[i][j] = uWord[uWord.length() - 1];
-									return true;
-								}
+								if(found)
+									boardRes[i][j] = true;
 						}
 
             if(i < board.size() - 1 && j < board[i].size() - 1) {//bottom right corner
                 bool found = searchWord(board, trie, i + 1, j + 1, 1, 1,uWord);
-								if(found) {	
-									boardRes[i][j] = uWord[uWord.length() - 1];
-									return true;
-								}
+								if(found)	
+									boardRes[i][j] = true;
 						}
 
             if(i < board.size() - 1 && j > 0) { //bottom left corner
                 bool found = searchWord(board, trie, i + 1, j - 1, -1, 1,uWord);
-								if(found) {	
-									boardRes[i][j] = uWord[uWord.length() - 1];
-									return true;
-								}
+								if(found)
+									boardRes[i][j] = true;
 						}
 
             if(j > 0) { //check left
                 bool found = searchWord(board, trie, i, j - 1, -1, 0,uWord);
-								if(found) {	
-									boardRes[i][j] = uWord[uWord.length() - 1];
-									return true;
-								}
+								if(found)	
+									boardRes[i][j] = true;
 						}
 
             if(i > 0) { //top
                 bool found = searchWord(board, trie, i - 1, j, 0, -1,uWord);
-								if(found) {	
-									boardRes[i][j] = uWord[uWord.length() - 1];
-									return true;
-								}
+								if(found)	
+									boardRes[i][j] = true;
 						}
 
             if(j < board[i].size() - 1) { //right 
                 bool found = searchWord(board, trie, i, j + 1, 1, 0,uWord);   
-								if(found) {	
-									boardRes[i][j] = uWord[uWord.length() - 1];
-									return true;
-								}
+								if(found)
+									boardRes[i][j] = true;
 						}
 
             if(i < board.size() - 1) { //bottom
                 bool found = searchWord(board, trie, i + 1, j, 0, 1,uWord);
-								if(found) {	
-									boardRes[i][j] = uWord[uWord.length() - 1];
-									return true;
-								}
+								if(found)
+									boardRes[i][j] = true;
 						}
         }
         else {
@@ -106,7 +92,7 @@ bool searchWord(const std::vector<std::vector<char>> &board, Trie &trie, unsigne
                 found = searchWord(board, trie, i - 1, j + 1, 1, -1,uWord);
 
 						if(found) {	
-							boardRes[i][j] = uWord[uWord.length() - 1];
+							boardRes[i][j] = true;
 							return true;
 						}
         }
@@ -119,7 +105,6 @@ int main(int argc, char* argv[])
 {
     Trie trie;
 		std::fstream file("words.txt", std::ios::in);
-		const char empty = ' '; 
 
 		//insert words into trie and set
 		if(file.is_open()) {
@@ -143,11 +128,11 @@ int main(int argc, char* argv[])
 		//fill game board
 		while(std::getline(puz_file, row)) {
 			std::vector<char> puzzle_row;
-			std::vector<char> res_row;
+			std::vector<bool> res_row;
 			
 			for(unsigned int i = 0; i < row.length(); i+=2) {
 				puzzle_row.push_back(std::toupper(row[i]));
-				res_row.push_back(empty);
+				res_row.push_back(false);
 			}
 		
 			board.push_back(puzzle_row);
@@ -169,7 +154,7 @@ int main(int argc, char* argv[])
     }
 
 		std::cout << '\n';
-		printBoard(boardRes);
+		printRes(board, boardRes);
 
     return 0;
 }
@@ -182,4 +167,17 @@ void printBoard(const std::vector<std::vector<char>> &board) {
         std::cout << '\n';
     }
 }
+
+void printRes(const std::vector<std::vector<char>> &board, const std::vector<std::vector<bool>> &boardRes) {
+    for(unsigned int i = 0; i < board.size(); ++i) {
+        for(unsigned int j = 0; j < board[i].size(); ++j) {
+						if(boardRes[i][j])
+            	std::cout << "\033[1;31m" << board[i][j] << "\033[0m ";
+						else
+							std::cout << board[i][j] << ' ';
+        }
+        std::cout << '\n';
+    }
+}
+
 
